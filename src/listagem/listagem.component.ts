@@ -27,11 +27,11 @@ export class ListagemComponent {
             .remove(filme)
             .subscribe(() => {
                 this.aplicarRemocao(filme);
-                this.sucesso = 'Filme removido com sucesso';
+                this.sucesso = 'Filme ' + filme.nome + ' removido com sucesso!';
                 this.timeoutMensagemSucesso()
             }, error => {
                 console.log(error);
-                this.erro = 'Não foi possível remover o filme';
+                this.erro = 'Não foi possível remover o filme!';
                 this.timeoutMensagemErro();
             })
     }
@@ -43,6 +43,7 @@ export class ListagemComponent {
         novosFilmes.splice(indice, 1);
         this.filmes = novosFilmes;
     }
+
     private timeoutMensagemSucesso(): void {
         setTimeout(() => {
             this.sucesso = '';

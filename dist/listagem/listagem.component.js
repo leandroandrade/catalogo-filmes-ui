@@ -29,11 +29,11 @@ var ListagemComponent = (function () {
             .remove(filme)
             .subscribe(function () {
             _this.aplicarRemocao(filme);
-            _this.sucesso = 'Filme removido com sucesso';
+            _this.sucesso = 'Filme ' + filme.nome + ' removido com sucesso!';
             _this.timeoutMensagemSucesso();
         }, function (error) {
             console.log(error);
-            _this.erro = 'Não foi possível remover o filme';
+            _this.erro = 'Não foi possível remover o filme!';
             _this.timeoutMensagemErro();
         });
     };
