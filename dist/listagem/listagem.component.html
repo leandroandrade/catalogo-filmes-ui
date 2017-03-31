@@ -1,0 +1,36 @@
+<div *ngIf="sucesso.length" class="alert alert-success" role="alert">
+    {{sucesso}}
+</div>
+
+<div *ngIf="erro.length" class="alert alert-danger" role="alert">
+    {{erro}}
+</div>
+
+<h2>Lista de Filmes</h2>
+
+<span class="input-group-btn">
+    <a [routerLink]="['/cadastro-filme']" class="btn btn-primary">
+        Novo filme
+    </a>
+</span>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th class="col-md-2">Nome</th>
+            <th class="col-md-4">Sinopse</th>
+            <th>Lançamento</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let filme of filmes">
+            <td>{{filme.nome}}</td>
+            <td>{{filme.sinopse}}</td>
+            <td>{{filme.lancamento}}</td>
+            <td>
+                <button class="btn btn-danger" (click)="remover(filme)" title="Remover">Remover</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
