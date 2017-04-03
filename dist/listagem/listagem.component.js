@@ -11,12 +11,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var filme_service_1 = require("../services/filme.service");
+var angular2_modal_1 = require("angular2-modal");
+var bootstrap_1 = require("angular2-modal/plugins/bootstrap");
 var ListagemComponent = (function () {
-    function ListagemComponent(service) {
+    function ListagemComponent(service, overlay, vcRef, modal) {
         var _this = this;
+        this.modal = modal;
         this.filmes = [];
         this.sucesso = '';
         this.erro = '';
+        overlay.defaultViewContainer = vcRef;
         this.service = service;
         this.service.lista()
             .subscribe(function (filmes) {
@@ -24,6 +28,22 @@ var ListagemComponent = (function () {
         }, function (error) { return console.log(error); });
     }
     ListagemComponent.prototype.remover = function (filme) {
+        var _this = this;
+        this.modal.confirm()
+            .size('sm')
+            .isBlocking(true)
+            .showClose(true)
+            .keyboard(27)
+            .title('Exclusão de filme')
+            .body('Deseja excluir o filme?')
+            .okBtn('Sim')
+            .cancelBtn('Não')
+            .open()
+            .then(function (dialog) { return dialog.result; })
+            .then(function (res) { return _this.removerFilme(filme); })
+            .catch(function (err) { return console.log("Ação cancelada pelo usuário"); });
+    };
+    ListagemComponent.prototype.removerFilme = function (filme) {
         var _this = this;
         this.service
             .remove(filme)
@@ -63,7 +83,7 @@ ListagemComponent = __decorate([
         selector: 'listagem',
         templateUrl: './listagem.component.html'
     }),
-    __metadata("design:paramtypes", [filme_service_1.FilmeService])
+    __metadata("design:paramtypes", [filme_service_1.FilmeService, angular2_modal_1.Overlay, core_1.ViewContainerRef, bootstrap_1.Modal])
 ], ListagemComponent);
 exports.ListagemComponent = ListagemComponent;
 //# sourceMappingURL=listagem.component.js.map

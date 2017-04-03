@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
 import { Filme } from '../models/filme';
 import { FilmeService } from '../services/filme.service';
+
+import { Overlay } from 'angular2-modal';
+import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 @Component({
     moduleId: module.id,
@@ -14,7 +17,9 @@ export class ListagemComponent {
     sucesso: string = '';
     erro: string = '';
 
-    constructor(service: FilmeService) {
+    constructor(service: FilmeService, overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal) {
+        overlay.defaultViewContainer = vcRef;
+
         this.service = service;
         this.service.lista()
             .subscribe(filmes => {
@@ -23,6 +28,23 @@ export class ListagemComponent {
     }
 
     remover(filme: Filme) {
+        this.modal.confirm()
+            .size('sm')
+            .isBlocking(true)
+            .showClose(true)
+            .keyboard(27)
+            .title('Exclusão de filme')
+            .body('Deseja excluir o filme?')
+            .okBtn('Sim')
+            .cancelBtn('Não')
+            .open()
+            .then(dialog => dialog.result)
+            .then(res => this.removerFilme(filme))
+            .catch(err => console.log("Ação cancelada pelo usuário"));
+
+    }
+
+    removerFilme(filme: Filme): void {
         this.service
             .remove(filme)
             .subscribe(() => {

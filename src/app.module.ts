@@ -11,9 +11,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { FilmeService } from './services/filme.service';
 
+import { ModalModule } from 'angular2-modal';
+import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+
 @NgModule({
     declarations: [AppComponent, ListagemComponent, CadastroFilmeComponent],
-    imports: [BrowserModule, routing, HttpModule, FormsModule, ReactiveFormsModule],
+    imports: [BrowserModule, routing, HttpModule, FormsModule, ReactiveFormsModule,
+        ModalModule.forRoot(),BootstrapModalModule],
     providers: [FilmeService],
     bootstrap: [AppComponent]
 })
