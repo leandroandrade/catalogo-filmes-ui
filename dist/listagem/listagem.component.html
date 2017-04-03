@@ -29,6 +29,7 @@
             <td>{{filme.sinopse}}</td>
             <td>{{filme.lancamento}}</td>
             <td>
+                <button [routerLink]="['/cadastro-filme', filme.id]" class="btn btn-primary" title="Editar">Editar</button>
                 <button class="btn btn-danger" (click)="remover(filme)" title="Remover">Remover</button>
             </td>
         </tr>

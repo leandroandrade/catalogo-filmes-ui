@@ -19,6 +19,11 @@ var FilmeService = (function () {
         this.headers.append('Content-Type', 'application/json');
     }
     FilmeService.prototype.cadastra = function (filme) {
+        if (filme.id) {
+            // recuperar a data do form
+            filme.lancamento = new Date();
+            return this.http.put(this.url + '' + filme.id, JSON.stringify(filme), { headers: this.headers });
+        }
         return this.http
             .post(this.url, JSON.stringify(filme), { headers: this.headers });
     };
@@ -28,6 +33,9 @@ var FilmeService = (function () {
     };
     FilmeService.prototype.remove = function (filme) {
         return this.http.delete(this.url + '' + filme.id);
+    };
+    FilmeService.prototype.pesquisaPeloId = function (id) {
+        return this.http.get(this.url + '' + id).map(function (response) { return response.json(); });
     };
     return FilmeService;
 }());

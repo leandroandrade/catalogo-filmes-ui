@@ -3,6 +3,7 @@ import { Filme } from '../models/filme';
 import { Trailer } from '../models/trailer';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FilmeService } from '../services/filme.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     moduleId: module.id,
@@ -14,12 +15,25 @@ export class CadastroFilmeComponent {
     filme: Filme = new Filme();
     formulario: FormGroup;
     service: FilmeService;
+    router: Router;
 
     sucesso: string = '';
     erro: string = '';
 
-    constructor(service: FilmeService, formularioBuilder: FormBuilder) {
+    constructor(service: FilmeService, formularioBuilder: FormBuilder, activateRoute: ActivatedRoute, router: Router) {
         this.service = service;
+        this.router = router;
+
+        activateRoute.params.subscribe(params => {
+            let id = params['id'];
+            if (id) {
+                this.service
+                    .pesquisaPeloId(id)
+                    .subscribe(filme => this.filme = filme);
+            }
+        });
+
+
         this.formulario = formularioBuilder.group({
             nome: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
             sinopse: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
@@ -35,6 +49,10 @@ export class CadastroFilmeComponent {
             .cadastra(this.filme)
             .subscribe(response => {
                 this.limpar();
+
+                if (this.isEdicao(response)) {
+                    this.router.navigate([''])
+                }
 
                 this.sucesso = 'Cadastro realizado com sucesso!';
                 this.timeoutMensagemSucesso();
@@ -78,6 +96,10 @@ export class CadastroFilmeComponent {
         setTimeout(() => {
             this.erro = '';
         }, 4000);
+    }
+
+    private isEdicao(response): boolean {
+        return response.status == 200;
     }
 
 

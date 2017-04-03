@@ -5,6 +5,7 @@ import {CadastroFilmeComponent} from './cadastro/cadastro-filme.component';
 const appRoutes: Routes = [
     { path: '', component: ListagemComponent },
     { path: 'cadastro-filme', component: CadastroFilmeComponent },
+    { path: 'cadastro-filme/:id', component: CadastroFilmeComponent },
     { path: '**', component: ListagemComponent },
 ];
 

@@ -19,6 +19,11 @@ export class FilmeService {
     }
 
     cadastra(filme: Filme): Observable<Response> {
+        if (filme.id) {
+            // recuperar a data do form
+            filme.lancamento = new Date();
+            return this.http.put(this.url + '' + filme.id, JSON.stringify(filme), { headers: this.headers });
+        }
         return this.http
             .post(this.url, JSON.stringify(filme), { headers: this.headers })
     }
@@ -30,6 +35,10 @@ export class FilmeService {
 
     remove(filme: Filme) {
         return this.http.delete(this.url + '' + filme.id);
+    }
+
+    pesquisaPeloId(id: string): Observable<Filme> {
+        return this.http.get(this.url + '' + id).map(response => response.json());
     }
 
 }

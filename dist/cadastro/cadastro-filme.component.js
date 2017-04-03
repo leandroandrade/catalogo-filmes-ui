@@ -14,12 +14,23 @@ var filme_1 = require("../models/filme");
 var trailer_1 = require("../models/trailer");
 var forms_1 = require("@angular/forms");
 var filme_service_1 = require("../services/filme.service");
+var router_1 = require("@angular/router");
 var CadastroFilmeComponent = (function () {
-    function CadastroFilmeComponent(service, formularioBuilder) {
+    function CadastroFilmeComponent(service, formularioBuilder, activateRoute, router) {
+        var _this = this;
         this.filme = new filme_1.Filme();
         this.sucesso = '';
         this.erro = '';
         this.service = service;
+        this.router = router;
+        activateRoute.params.subscribe(function (params) {
+            var id = params['id'];
+            if (id) {
+                _this.service
+                    .pesquisaPeloId(id)
+                    .subscribe(function (filme) { return _this.filme = filme; });
+            }
+        });
         this.formulario = formularioBuilder.group({
             nome: ['', forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.minLength(2)])],
             sinopse: ['', forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.minLength(2)])],
@@ -34,6 +45,9 @@ var CadastroFilmeComponent = (function () {
             .cadastra(this.filme)
             .subscribe(function (response) {
             _this.limpar();
+            if (_this.isEdicao(response)) {
+                _this.router.navigate(['']);
+            }
             _this.sucesso = 'Cadastro realizado com sucesso!';
             _this.timeoutMensagemSucesso();
         }, function (error) {
@@ -71,6 +85,9 @@ var CadastroFilmeComponent = (function () {
             _this.erro = '';
         }, 4000);
     };
+    CadastroFilmeComponent.prototype.isEdicao = function (response) {
+        return response.status == 200;
+    };
     return CadastroFilmeComponent;
 }());
 CadastroFilmeComponent = __decorate([
@@ -79,7 +96,7 @@ CadastroFilmeComponent = __decorate([
         selector: 'cadastro-filme',
         templateUrl: './cadastro-filme.component.html'
     }),
-    __metadata("design:paramtypes", [filme_service_1.FilmeService, forms_1.FormBuilder])
+    __metadata("design:paramtypes", [filme_service_1.FilmeService, forms_1.FormBuilder, router_1.ActivatedRoute, router_1.Router])
 ], CadastroFilmeComponent);
 exports.CadastroFilmeComponent = CadastroFilmeComponent;
 //# sourceMappingURL=cadastro-filme.component.js.map
